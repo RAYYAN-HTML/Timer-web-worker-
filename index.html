@@ -4,40 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Web Worker Timer</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        text-align: center;
-        margin-top: 50px;
-      }
-      textarea {
-        width: 600px;
-        height: 200px;
-        display: block;
-        margin: 20px auto;
-        font-size: 16px;
-      }
-      button {
-        padding: 10px 20px;
-        font-size: 16px;
-        background-color: #af5b4c;
-        color: rgb(213, 17, 17);
-        border: none;
-        cursor: pointer;
-      }
-      button:hover {
-        background-color: #45a049;
-      }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
   </head>
-  <body>
-    <h1>Web Worker Timer: You have 60 seconds to type something!</h1>
-    <h1 id="timer">Time Left: 60s</h1>
+  <body class="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
+    <h1 class="text-2xl font-bold text-gray-800 text-center mb-4">
+      Web Worker Timer: You have 60 seconds to type something!
+    </h1>
+    <h1 id="timer" class="text-xl font-semibold text-red-600 mb-4">
+      Time Left: 60s
+    </h1>
 
-    <button id="startBtn">Start Timer</button>
-    <button onclick="window.location.reload();">Restart</button>
+    <div class="space-x-4 mb-4">
+      <button id="startBtn" class="px-4 py-2 text-white bg-red-500 rounded-lg hover:bg-red-600">
+        Start Timer
+      </button>
+      <button onclick="window.location.reload();" class="px-4 py-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600">
+        Restart
+      </button>
+    </div>
 
-    <textarea id="input" placeholder="Start typing..." disabled></textarea>
+    <textarea
+      id="input"
+      class="w-full max-w-lg h-48 p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none text-lg"
+      placeholder="Start typing..."
+      disabled
+    ></textarea>
 
     <script>
       let worker;
@@ -53,6 +44,7 @@
         worker = new Worker("worker.js");
         textarea.disabled = false;
         startBtn.disabled = true;
+        startBtn.classList.add("opacity-50", "cursor-not-allowed");
 
         worker.postMessage("Worker is on duty!");
 
