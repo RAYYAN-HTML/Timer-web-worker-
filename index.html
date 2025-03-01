@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web Worker Timer</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        margin-top: 50px;
+      }
+      textarea {
+        width: 600px;
+        height: 200px;
+        display: block;
+        margin: 20px auto;
+        font-size: 16px;
+      }
+      button {
+        padding: 10px 20px;
+        font-size: 16px;
+        background-color: #af5b4c;
+        color: rgb(213, 17, 17);
+        border: none;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #45a049;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Web Worker Timer: You have 60 seconds to type something!</h1>
+    <h1 id="timer">Time Left: 60s</h1>
+
+    <button id="startBtn">Start Timer</button>
+    <button onclick="window.location.reload();">Restart</button>
+
+    <textarea id="input" placeholder="Start typing..." disabled></textarea>
+
+    <script>
+      let worker;
+      const timerDisplay = document.getElementById("timer");
+      const textarea = document.getElementById("input");
+      const startBtn = document.getElementById("startBtn");
+
+      startBtn.addEventListener("click", function () {
+        if (worker) {
+          worker.terminate();
+        }
+
+        worker = new Worker("worker.js");
+        textarea.disabled = false;
+        startBtn.disabled = true;
+
+        worker.postMessage("Worker is on duty!");
+
+        worker.onmessage = function (event) {
+          const seconds = event.data;
+          timerDisplay.textContent = `Time Left: ${60 - seconds}s`;
+
+          if (seconds >= 60) {
+            textarea.disabled = true;
+            worker.terminate();
+          }
+        };
+      });
+    </script>
+  </body>
+</html>
